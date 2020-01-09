@@ -27,11 +27,9 @@ class Profile(models.Model):
         verbose_name_plural = "Профили"
 
 
-
 class Organisation(models.Model):
     name = models.CharField('Название отдела', max_length=40)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    
     def __str__(self):
         return self.name
 
@@ -39,17 +37,18 @@ class Organisation(models.Model):
         verbose_name = "Отдел"
         verbose_name_plural = "Отделы"
 
+
 class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     PRIORITY_STATUS = (('0', 'низкий'),('1', 'средний'), ('2', 'высокий'))
     description = models.TextField('Описание Задачи', blank=True, null=True)
     name = models.CharField('Название задачи', max_length=30)
-    STATUS_TASK = (('0', 'активна'),('1','неактивна'))
+    STATUS_TASK = (('0', 'активна'),('1','завершена'))
     data_send = models.DateTimeField(default=timezone.now, blank=False, null = True)
     time = models.DateField('срок исполения задачи', blank = True, null = True)
     priority = models.CharField('приоритет', choices=PRIORITY_STATUS, null=True , blank = True, default='0', max_length=5)
+    status = models.CharField('Статус', choices = STATUS_TASK, null=True, blank=True, default='0', max_length=5)
     organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE)
-    report = models.TextField('Отчет', blank=True, null=True)
     
     def __str__(self):
         return self.name
@@ -59,6 +58,17 @@ class Task(models.Model):
         verbose_name_plural = "Задачи"
 
 
+class Report(models.Model):
+    description = models.TextField('Текст отчета', blank=True, null=True)
+    data_send = models.DateTimeField(default=timezone.now, blank=False, null = True)
+    report_task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.report_task.name
+
+    class Meta:
+        verbose_name = "Отчет"
+        verbose_name_plural = "Отчеты"
+    
 
 

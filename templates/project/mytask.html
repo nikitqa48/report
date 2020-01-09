@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="wrapper">
+{% include "project/header.html" %}
+<div class="no_wrap">
+{% include "project/sidebar.html" %}
+<div class="filter">
+    <h2 class="ul_header">
+        Фильтры
+    </h2>
+    <ul class="ul_filter">
+        <li>По приоритету</li>
+        <li>По проектам</li>
+        <li>Завершенные</li>
+        <li>Все задачи</li>
+    </ul>
+</div>
+<div class="content">
+    <h1>Мои задачи</h1>
+    <div class="items">
+        {% for task in tasks %}
+        <div class="item">
+            <div class="item_container">
+                <div class="item_row">
+                <p class="item_bold">{{task.name}}</p>
+                <div class="item_row__row">
+                <p class="item_bold">Срок выполнения задачи:</p>
+                <span class="red">{{task.time}}</span>
+            </div>
+            </div>
+            <div class="item_row">
+                <div class="item_row__row">
+                <p class="item_bold">Приоритет:</p>
+                {% if task.priority == "1" %}
+                <span class="green">Средний</span>
+                {% elif task.priority == '0' %}
+                <span class="grey">Низкий</span>
+                {% elif task.priority == '2' %}
+                <span class="red">Высокий</span>
+                {% endif%}
+            </div>
+                <div class="item_row__row">
+                    <p class="item_bold">Проект:</p>
+                    <p class="grey">{{task.project.name}}</p>
+                </div>
+            </div>
+            <div class="description">
+                <p class="descript">{{task.description}}
+                </p>
+            </div>
+            <div class="item_row">
+                <div class="item_row__row">
+                    <p class="item_bold">Выполняет:</p>
+                    <p class="grey">{{task.organisation}}</p>
+                </div>
+                <div class="item_row__row">
+                    <p class="item_bold">Время постановления задачи:</p>
+                    <p class="grey">{{task.data_send}}</p>
+                </div>
+            </div>
+            <div class="item_row__end">
+                <div class="add">
+                    <input class="button_blue" type="button" value="Добавить отчет">
+
+                    <form method="POST" action='{% url "end_task" pk=task.id%}'>
+                <button class="button_red">Завершить</button>
+                {% csrf_token %}
+            </form>
+            </div>
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+</div>
+</div>
+{% endblock %}
